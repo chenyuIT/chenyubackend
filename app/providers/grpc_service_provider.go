@@ -4,8 +4,8 @@ import (
 	"github.com/goravel/framework/contracts/foundation"
 	"github.com/goravel/framework/facades"
 
-	"goravel/app/grpc"
-	"goravel/routes"
+	"chenyucms/app/grpc"
+	"chenyucms/routes"
 )
 
 type GrpcServiceProvider struct {

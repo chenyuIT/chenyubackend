@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package status;
+
+enum Code {
+    Fail = 0;
+    Success = 1;
+}
+enum errorMsg {
+  AUTH_FAIL = 0 ;
+  OTHER = 1;
+}
+message CommonResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+}
+

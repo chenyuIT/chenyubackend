@@ -1,6 +1,7 @@
 CREATE TABLE users (
   id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   name varchar(191) DEFAULT '' NOT NULL,
+  password varchar(100) DEFAULT '' NOT NULL,
   avatar varchar(191) DEFAULT '' NOT NULL,
   created_at datetime(3) NOT NULL,
   updated_at datetime(3) NOT NULL,

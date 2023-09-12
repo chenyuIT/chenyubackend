@@ -1,0 +1,443 @@
+syntax = "proto3";
+
+package contact;
+
+// biz/model
+option go_package = "cy.contact";
+
+import "api.proto";
+import "status.proto";
+
+
+/*-------------------------------------*/
+enum Status_contact {
+  CONTACT_FORBIDDEN = 0;   //禁用
+  CONTACT_OK =1;           //正常
+  CONTACT_BLACK =2;        //拉黑
+  CONTACT_VIP =3;          //重要
+}
+
+/*--------------------------------------*/
+//通讯录数据结构--contact : 对应数据表  contact
+message Contact {
+  int32      ID = 1;
+  int32      Userid =2;
+  string     Contact = 3;
+  string     Firstname = 4;
+  string     Lastname = 5;
+  string     Nickname = 6;
+  string     Oldname = 7;
+  string     Sex = 8;
+  string     Birthday =9;
+  string     Avator =10;
+  string     Title = 11;
+  string     Position = 12;
+  string     Company = 13;
+  int32      Companyid =14;
+  string     Relateship = 15;     //关系: 同事;领导;客户;朋友;同学;未知;亲戚;其他
+  string     Homeaddress = 16;
+  string     Homecity = 17;
+  string     Homestate = 18;
+  string     Homecountry = 19;
+  string     Homezip = 20;
+  string     Companyaddress = 21;
+  string     Companycity = 22;
+  string     Companystate = 23;
+  string     Companycountry = 24;
+  string     Companyzip = 25;
+  string     Businessstatus = 26; //业务关系: 1:线索;2:客户;3:同事;4:领导;5:其他;
+  string     Phone = 27;
+  string     Phone2 = 28;
+  string     Email = 29;
+  string     Email2 = 30;
+  string     Wechat = 31;
+  string     Qq = 32;
+  string     Dingtalk = 33;
+  string     Emergency_contact = 34;
+  string     Emergency_phone = 35;
+  int32      Status = 36;      //0:禁用;1:正常;2:拉黑;3:重要
+  int64      Created = 37;   //@gotags:gorm:"column:unix_timestamp(created_at)"
+  int64      Updated = 38;  //@gotags:gorm:"column:unix_timestamp(updated_at)"
+}
+
+
+/*--------------------------------------*/
+//通讯录数据结构--group : 对应数据表  group
+message Group {
+   int32  id =1;
+   string group=2;
+   int32  public=3;
+   int32  userid=4;
+   int32  total=5;
+   int32  status=6;
+   int64  Created = 7;
+   int64  Updated = 8;
+
+}
+
+/*--------------------------------------*/
+//通讯录数据结构--contactitems : 对应数据表  contactitems
+message Contactitems {
+  int32  id =1;
+  int32  userid =2;
+  int32  contactid=3;
+  int32  groupid=4;
+  int32  status=5;
+}
+
+
+/*-----------------------------------*/
+//查询和列表项目的请求输入 Request
+message ListByTokenReq{
+    string token =1;
+}
+//审批查询和列表项目的调用输出 Response
+message ListByTokenResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+
+  message Data{
+    int32 id = 1;
+    string username = 2;
+    int32 status = 3;
+    string nickname =4;
+    string lastname = 5;
+    string firstname =6 ;
+    string token = 7;
+    int32 set_id = 8;
+  }
+  Data data = 3;
+
+}
+/*--------------------------------------*/
+
+
+/*-----------------------------------*/
+//审批查询和列表项目的请求输入 Request
+message ListReq{
+  Contact data = 1;
+  int32   cond = 2;    // cond =0 -- and; cond =2 -- or
+  int32   page =3  [(api.vd)="$>0"];  // show pages
+  int32   perPageItem =4  [(api.vd)="$>0"]; // show size in a page
+}
+//审批查询和列表项目的调用输出 Response
+message ListResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  message Data{
+    int32 page =1;
+    int64 totalItem = 2;
+    int64 totalPage = 3;
+    repeated Contact data = 4;
+  }
+  Data data = 3 ;
+}
+/*--------------------------------------*/
+
+/*-----------------------------------*/
+//添加联系人的请求输入 Request
+message AddReq{
+  Contact data=1;
+}
+//添加审批的调用输出 Response
+message AddResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  Contact  data =3;    //return new contact
+}
+/*--------------------------------------*/
+
+/*-----------------------------------*/
+//更新联系人的请求输入 Request
+message UpdateReq{
+  Contact data =1;
+}
+//更新审批的调用输出 Response
+message UpdateResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  Contact data =3;
+
+}
+/*--------------------------------------*/
+
+
+/*-----------------------------------*/
+//删除联系人的请求输入 Request
+message DeleteReq{
+  Contact data =1;
+  int32 cond =2; // cond=0 或;cond=1 并且
+}
+//删除联系人的调用输出 Response
+message DeleteResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+}
+
+/*--------------------------------------*/
+
+/*-----------------------------------*/
+
+//组请求输入 Request
+message groupListReq{
+  Group data = 1;
+  int32   cond = 2;    // cond =0 -- and; cond =2 -- or
+  int32   page =3  [(api.vd)="$>0"];  // show pages
+  int32   perPageItem =4  [(api.vd)="$>0"]; // show size in a page
+}
+
+//组的调用输出 Response
+message groupListResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  message Data{
+    int32 page =1;
+    int64 totalItem = 2;
+    int64 totalPage = 3;
+    repeated Group data = 4;
+  }
+  Data data = 3 ;
+}
+
+//添加组的请求输入 Request
+message groupAddReq{
+  Group data=1;
+}
+//添加组的调用输出 Response
+message groupAddResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  Group  data =3;    //return new group
+}
+/*--------------------------------------*/
+
+/*-----------------------------------*/
+//更新联系人的请求输入 Request
+message groupUpdateReq{
+  Group data =1;
+}
+//更新审批的调用输出 Response
+message groupUpdateResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  Group data =3;
+
+}
+/*--------------------------------------*/
+
+
+/*-----------------------------------*/
+//删除组的请求输入 Request
+message groupDeleteReq{
+  Group data =1;
+  int32 cond =2; // cond=0 或;cond=1 并且
+}
+//删除组的调用输出 Response
+message groupDeleteResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+}
+
+//添加组的请求输入 Request
+message groupAddUserReq{
+ Contactitems data =1;
+}
+//添加组的调用输出 Response
+message groupAddUserResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  Contactitems  data =3;    //return new contactitems
+}
+/*--------------------------------------*/
+
+
+/*-----------------------------------*/
+//删除联系人从组的请求输入 Request
+message groupDeleteUserReq{
+  int32 id =1; // delete only by id
+}
+//删除联系人从组调用输出 Response
+message groupDeleteUserResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+}
+
+//删除联系人从组的请求输入 Request
+message groupDeleteUserListReq{
+  int32 groupid   =1;
+  int32 userid    =2;
+  int32 contactid =3;
+}
+//删除联系人从组调用输出 Response
+message groupDeleteUserListResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+}
+
+
+/*-----------------------------------*/
+//分组显示联系人输入 Request
+message groupUserListReq{
+  int32 userid =1; // showlist only by userid
+}
+//分组显示联系人调用输出 Response
+message groupUserListResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  message  Data {
+    int32 groupid =1;
+    string group =2;
+    repeated Contact contact=3;
+}
+  repeated  Data  data=3;
+}
+
+/*--------------------------------------*/
+//记事本API
+message Note {
+  int32 ID =1;
+  int32 UserID=2;
+  string Catelog=3;
+  string Title=4;
+  string Content=5;
+  int32 Status=6;
+  int64  Created = 7;
+  int64  Updated = 8;
+
+}
+
+//记事本查询列表
+message NoteListReq {
+  int32  Userid =1;
+}
+message NoteListResp {
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  message  Data {
+    repeated Note note=1;
+  }
+  Data  data=3;
+}
+
+//记事本添加内容
+message NoteAddReq {
+  int32  Userid =1;
+  string Catelog=2;
+  string Title=3;
+  string Content=4;
+  int32 Status=5;
+}
+
+message NoteAddResp {
+  status.Code code = 1;
+  string errormsg  = 2;
+    Note note      = 3;
+}
+
+//记事本更新内容
+message NoteUpdateReq {
+  int32  Id =1;
+  int32 Userid=2;
+  string Catelog=3;
+  string Title =4;
+  string Content=5;
+  int32 Status=6;
+}
+
+message NoteUpdateResp {
+  status.Code code = 1;
+  string errormsg  = 2;
+    Note note      = 3;
+}
+
+//记事本删除
+message NoteDeleteReq {
+  int32  Id =1;
+}
+
+message NoteDeleteResp {
+  status.Code code = 1;
+  string errormsg  = 2;
+}
+
+/*--------------------------------------*/
+
+service Controller {
+  //根据token查询用户信息
+  rpc Listbytoken(ListByTokenReq) returns(ListByTokenResp){
+    option (api.post) = "/contact/listbytoken";
+  }
+  //查询和列表联系人
+  rpc List(ListReq) returns(ListResp){
+    option (api.post) = "/contact/list";
+  }
+  //添加联系人
+  rpc Add(AddReq) returns(AddResp){
+    option (api.post) = "/contact/add";
+  }
+  //更新联系人
+  rpc Update(UpdateReq) returns(UpdateResp){
+    option (api.put) = "/contact/update";
+  }
+  //通讯录删除联系人
+  rpc delete(DeleteReq) returns(DeleteResp){
+    option (api.delete) = "/contact/delete";
+  }
+
+  /* ==== workgroup ====== */
+  //查询组列表
+  rpc groupList(groupListReq) returns(groupListResp){
+    option (api.post) = "/contact/grouplist";
+  }
+  //添加组
+  rpc groupAdd(groupAddReq) returns(groupAddResp){
+    option (api.post) = "/contact/groupadd";
+  }
+  //更新组
+  rpc groupUpdate(groupUpdateReq) returns(groupUpdateResp){
+    option (api.put) = "/contact/groupupdate";
+  }
+  //删除组
+  rpc groupdelete(groupDeleteReq) returns(groupDeleteResp){
+    option (api.delete) = "/contact/groupdelete";
+  }
+  //添加联系人到组
+  rpc groupAddUser(groupAddUserReq) returns(groupAddUserResp){
+    option (api.post) = "/contact/groupadduser";
+  }
+  //删除联系人从组
+  rpc groupdeleteUser(groupDeleteUserReq) returns(groupDeleteUserResp){
+    option (api.delete) = "/contact/groupdeleteuser";
+  }
+
+  //删除联系人从组里根据用户组和userid以及 contactid
+  rpc groupdeleteUserList(groupDeleteUserListReq) returns(groupDeleteUserListResp){
+    option (api.delete) = "/contact/groupdeleteuserlist";
+  }
+
+  //联系人分组显示
+  rpc groupUserlist(groupUserListReq) returns(groupUserListResp){
+    option (api.post) = "/contact/groupuserlist";
+  }
+
+  //记事本Endpoint
+  //记事本查询列表
+  rpc noteList(NoteListReq) returns(NoteListResp) {
+    option (api.post) = "/note/list";
+  }
+  //记事本添加
+  rpc noteAdd(NoteAddReq) returns(NoteAddResp) {
+    option (api.post) = "/note/add";
+  }
+
+  //记事本更新
+  rpc noteLUpdate(NoteUpdateReq) returns(NoteUpdateResp) {
+    option (api.put) = "/note/update";
+  }
+  //记事本删除
+  rpc noteLDelete(NoteDeleteReq) returns(NoteDeleteResp) {
+    option (api.delete) = "/note/delete";
+  }
+
+}
+/*--------------------------------------*/

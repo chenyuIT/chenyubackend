@@ -4,8 +4,8 @@ import (
 	"github.com/goravel/framework/contracts/http"
 	"github.com/goravel/framework/facades"
 
-	"goravel/app/http/requests"
-	"goravel/app/models"
+	"chenyucms/app/http/requests"
+	"chenyucms/app/models"
 )
 
 /*********************************

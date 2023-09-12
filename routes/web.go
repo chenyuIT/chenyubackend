@@ -1,18 +1,17 @@
 package routes
 
 import (
+	"chenyucms/app/http/controllers"
+	"chenyucms/app/http/middleware"
 	"github.com/goravel/framework/contracts/http"
 	"github.com/goravel/framework/facades"
 	httpswagger "github.com/swaggo/http-swagger"
-
-	"goravel/app/http/controllers"
-	"goravel/app/http/middleware"
 )
 
 func Web() {
 	facades.Route().Get("/", func(ctx http.Context) {
 		ctx.Response().Json(200, http.Json{
-			"Hello": "Goravel",
+			"Hello": "ChenyuCMS",
 		})
 	})
 

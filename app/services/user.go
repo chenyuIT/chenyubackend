@@ -3,7 +3,7 @@ package services
 import (
 	"github.com/goravel/framework/facades"
 
-	"goravel/app/models"
+	"chenyucms/app/models"
 )
 
 type User interface {

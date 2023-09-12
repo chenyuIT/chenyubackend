@@ -5,7 +5,7 @@ import (
 	"github.com/goravel/framework/contracts/validation"
 	"github.com/goravel/framework/facades"
 
-	"goravel/app/rules"
+	"chenyucms/app/rules"
 )
 
 type ValidationServiceProvider struct {

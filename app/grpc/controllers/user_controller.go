@@ -11,7 +11,7 @@ import (
 	goravelhttp "github.com/goravel/framework/http"
 	"github.com/pkg/errors"
 
-	"goravel/app/models"
+	"chenyucms/app/models"
 )
 
 /*********************************

@@ -21,11 +21,24 @@ func init() {
 		// been set up for each driver as an example of the required values.
 		//
 		// Supported Drivers: "local", "s3", "oss", "cos", "custom"
+		// local : set path to local storage/app
+		// uploads : set path to local public/uploads
+		// module  : set path to local module -- for module exec path
 		"disks": map[string]any{
 			"local": map[string]any{
 				"driver": "local",
 				"root":   "storage/app",
 				"url":    config.Env("APP_URL").(string) + "/storage",
+			},
+			"uploads": map[string]any{
+				"driver": "local",
+				"root":   "public/uploads",
+				"url":    config.Env("APP_URL").(string) + "/public/uploads",
+			},
+			"module": map[string]any{
+				"driver": "local",
+				"root":   "module",
+				"url":    config.Env("APP_URL").(string) + "/module",
 			},
 		},
 	})

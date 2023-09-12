@@ -1,10 +1,9 @@
 package routes
 
 import (
+	"chenyucms/app/grpc/controllers"
 	proto "github.com/goravel/example-proto"
 	"github.com/goravel/framework/facades"
-
-	"goravel/app/grpc/controllers"
 )
 
 func Grpc() {

@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package role_user;
+
+// biz/model
+option go_package = "cy.role_user";
+
+import "api.proto";
+import "status.proto";
+
+
+message Subject {
+  int32 id = 1;
+  int32 roleid = 2;
+  int32 userid=3;
+  int32 status=4;
+  string username = 5; //@gotags:structs:"-" gorm:"->"  
+}
+/*--------------------------------------*/  
+message ListReq{
+    int32  user_id = 1 ;
+    int32  role_id = 2 ;
+    int32 page = 3  [(api.vd)="$>0"];
+    int32 perPageItem =4  [(api.vd)="$>0"];
+}
+message ListResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  message Data{
+    int32 page =1; 
+    int64 totalItem = 2;
+    int64 totalPage = 3;
+    repeated Subject data = 4;
+  }
+  Data data = 3 ;
+      
+}
+/*--------------------------------------*/  
+message ListDetailsReq{
+  int32 id = 1  [(api.vd)="$>0"];    
+}
+message ListDetailsResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  Subject data = 3;
+  
+}
+
+/*--------------------------------------*/ 
+
+/*--------------------------------------*/  
+message UpdateReq{
+  int32 user_id = 1;
+  repeated int32 role_id  = 2;
+}
+message UpdateResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  
+}
+/*--------------------------------------*/  
+
+/*--------------------------------------*/  
+message DeleteReq{
+    int32 id = 1 [(api.vd)="$>0"];
+
+}
+message DeleteResp{
+  status.Code code = 1;
+  string errormsg  = 2 ;
+  Subject data = 3;
+}
+/*--------------------------------------*/  
+
+/*--------------------------------------*/  
+service Controller {
+  //role
+  rpc List(ListReq) returns(ListResp){
+    option (api.post) = "/role/user/list";
+  }
+  rpc Update(UpdateReq) returns(UpdateResp){
+    option (api.post) = "/role/user/update";
+  }
+ 
+
+
+
+}
+/*--------------------------------------*/
